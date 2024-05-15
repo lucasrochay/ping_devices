@@ -20,7 +20,11 @@ def parse_ping_output(output, system):
                 parts = line.split(',')
                 transmitted = int(parts[0].split('=')[1].strip())
                 received = int(parts[1].split('=')[1].strip())
-                loss = int(parts[2].split('=')[1].strip().replace('%', ''))
+                loss_str = parts[2].split('=')[1].strip().replace('%', '')
+                if loss_str == '0 (0 loss)':
+                    loss = 0
+                else:
+                    loss = int(loss_str)
     else:
         for line in output.split('\n'):
             if 'packets transmitted' in line:
