@@ -68,7 +68,7 @@ def write_summary_to_log(log_file, results):
             lost = transmitted - received
             loss_percentage = (lost / transmitted) * 100 if transmitted > 0 else 100.0
             log.write(f"Device: {device}\n")
-            log.write(f"Packets: Transmitted = {transmitted}, Received = {received}, Lost = {loss_percentage:.1f}%\n")
+            log.write(f"Packets: Sent = {transmitted}, Received = {received}, Lost = {loss_percentage:.1f}%\n")
             log.write("\n")
 
 def wait_for_key_press(stop_event):
