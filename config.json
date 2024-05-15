@@ -1,0 +1,12 @@
+{
+    "devices": [
+      "10.0.9.10",
+      "10.0.9.11",
+      "10.0.9.12"
+    ],
+    
+    "ping_count": 4,
+    "timeout": 2,
+    "log_file": "ping_log.txt"
+  }
+  
