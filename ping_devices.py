@@ -6,6 +6,12 @@ import threading
 from datetime import datetime
 import platform
 
+if platform.system() == 'Windows':
+    import msvcrt
+else:
+    import sys
+    import select
+
 def load_config(config_file):
     with open(config_file, 'r') as file:
         config = json.load(file)
@@ -20,11 +26,8 @@ def parse_ping_output(output, system):
                 parts = line.split(',')
                 transmitted = int(parts[0].split('=')[1].strip())
                 received = int(parts[1].split('=')[1].strip())
-                loss_str = parts[2].split('=')[1].strip().replace('%', '')
-                if loss_str == '0 (0 loss)':
-                    loss = 0
-                else:
-                    loss = int(loss_str)
+                loss_str = parts[2].split('=')[1].strip()
+                loss = int(loss_str.split()[0])  # Extract the numeric part before "(loss)"
     else:
         for line in output.split('\n'):
             if 'packets transmitted' in line:
@@ -68,6 +71,15 @@ def write_summary_to_log(log_file, results):
             log.write(f"Packets: Transmitted = {transmitted}, Received = {received}, Lost = {loss_percentage:.1f}%\n")
             log.write("\n")
 
+def wait_for_key_press(stop_event):
+    system = platform.system()
+    print("Press any key to stop...")
+    if system == 'Windows':
+        msvcrt.getch()  # Wait for a key press on Windows
+    else:
+        input()  # Wait for Enter key press on Unix-like systems
+    stop_event.set()
+
 def main():
     config = load_config('config.json')
     devices = config['devices']
@@ -95,8 +107,12 @@ def main():
     ping_thread = threading.Thread(target=ping_devices_continuously, args=(devices, ping_count, timeout, results, stop_event, system))
     ping_thread.start()
 
+    # Start a thread to listen for key press to stop
+    key_thread = threading.Thread(target=wait_for_key_press, args=(stop_event,))
+    key_thread.start()
+
     try:
-        input("Press any key to stop...\n")
+        key_thread.join()  # Wait for the key press thread to finish
     except KeyboardInterrupt:
         print("Interrupted!")
     finally:
