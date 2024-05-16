@@ -49,7 +49,12 @@ def ping_device(device, ping_count, timeout, system):
         command = ['ping', '-c', str(ping_count), '-W', str(timeout), device]
         
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    output = result.stdout.decode()
+    
+    # Try decoding with utf-8 and handle errors
+    try:
+        output = result.stdout.decode('utf-8', errors='replace')
+    except UnicodeDecodeError:
+        output = result.stdout.decode('latin-1', errors='replace')
 
     transmitted, received, loss = parse_ping_output(output, system)
 
@@ -133,4 +138,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
