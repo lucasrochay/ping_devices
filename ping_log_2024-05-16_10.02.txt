@@ -1,0 +1,14 @@
+
+Summary:
+Start Time: 2024-05-16 10:02:40
+End Time: 2024-05-16 10:03:42
+
+Device: 10.0.9.10
+Packets: Sent = 20, Received = 0, Lost = 100.0%
+
+Device: 10.0.9.11
+Packets: Sent = 20, Received = 20, Lost = 0.0%
+
+Device: 10.0.9.12
+Packets: Sent = 20, Received = 20, Lost = 0.0%
+
