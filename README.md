@@ -1,4 +1,3 @@
-```markdown
 # Ping Devices
 
 This script continuously pings a list of devices and logs the results.
@@ -77,4 +76,3 @@ Feel free to submit issues or pull requests if you find any bugs or have suggest
 ## License
 
 This project is licensed under the MIT License.
-```
